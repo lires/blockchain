@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "node api.js",
+    "test": "jest --watchAll"
+  },
+  "dependencies": {
+    "axios": "^1.9.0",
+    "body-parser": "^2.2.0",
+    "crypto-js": "^4.2.0",
+    "express": "^5.1.0",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.0",
+    "ws": "^8.18.1"
+  }
+}
