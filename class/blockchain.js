@@ -14,8 +14,8 @@ class Blockchain {
   }
 
   static blockHash(block) {
-    const { timestamp, lastHash, data } = block;
-    return Block.hash(timestamp, lastHash, data);
+    const { timestamp, lastHash, data, nonce, difficulty } = block;
+    return Block.hash(timestamp, lastHash, data, nonce, difficulty);
   }
 
   static isValidChain(chain) {

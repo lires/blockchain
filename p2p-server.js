@@ -1,23 +1,38 @@
 const WebSocket = require('ws');
-const PORT = 5001;
-const peers = [];
+
+const P2P_PORT = 5001;
+const peers = process.env.PEERS ? process.env.PEERS.split(',') : [];
 
 class P2PServer {
   constructor(blockchain) {
     this.blockchain = blockchain;
     this.sockets = [];
+    this.server = null;
   }
 
   listen() {
-    const server = new WebSocket.Server({ port: PORT });
+    this.server = new WebSocket.Server({ port: P2P_PORT });
     
-    server.on('connection', socket => {
+    this.server.on('connection', socket => {
       this.connectSocket(socket);
     });
 
     this.connectToPeers();
     
-    console.log(`Serveur P2P en écoute sur le port ${PORT}`);
+    console.log(`P2P écoute le port ${P2P_PORT}`);
+    
+    return this.server;
+  }
+
+  close(callback) {
+    if (this.server) {
+      this.server.close(() => {
+        console.log('P2P server closed');
+        if (callback) callback();
+      });
+    } else if (callback) {
+      callback();
+    }
   }
 
   connectToPeers() {
@@ -42,7 +57,6 @@ class P2PServer {
   messageHandler(socket) {
     socket.on('message', message => {
       const data = JSON.parse(message);
-      console.log('Message reçu:', data);
       
       this.blockchain.replaceChain(data);
     });
